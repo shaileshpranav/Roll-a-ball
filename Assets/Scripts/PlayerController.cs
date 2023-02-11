@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class PlayerController : MonoBehaviour
@@ -11,6 +12,7 @@ public class PlayerController : MonoBehaviour
     public GameObject winTextObject;
     private Rigidbody rb;
     private PlayerInputActions _input;
+    private AudioSource crunch;
     private int count;
     private float movementX;
     private float movementY;
@@ -21,6 +23,7 @@ public class PlayerController : MonoBehaviour
         count = 0;
         SetCountText();
         winTextObject.SetActive(false);
+        crunch = GetComponent<AudioSource>();
     }
 
 
@@ -41,9 +44,10 @@ public class PlayerController : MonoBehaviour
     void SetCountText()
     {
         countText.text = "Count: " + count.ToString();
-        if(count >= 8)
+        if(count >= 16)
         {
             winTextObject.SetActive(true);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
     }
 
@@ -58,6 +62,7 @@ public class PlayerController : MonoBehaviour
         if(other.gameObject.CompareTag("PickUp"))
         {
             other.gameObject.SetActive(false);
+            crunch.Play();
             count +=1;
             SetCountText();
 
